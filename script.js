@@ -6,7 +6,7 @@ const app = document.querySelector('#app'),
     headerLink = [...document.querySelectorAll('.header__link')];
 headerLink.forEach(item => item.addEventListener('click', function (e) {
     e.preventDefault();
-    let address = this.getAttribute('href');
+    let address = this.getAttribute('href').toLowerCase();
     // toggleClass(this);
     let activePage = pages.find(item => item.url == address);
     window.location.hash = hash + address;
@@ -22,6 +22,20 @@ let toggleClass = (elem) => {
 
 class Home {
     constructor({ title = 'Home', descr = 'Home page' }) {
+        this.title = title;
+        this.descr = descr;
+        this.print();
+    }
+    print() {
+        let div = `
+            <h3>${this.title}</h3>
+            <p class="home__info">${this.descr}</p>
+        `;
+        return div;
+    }
+}
+class Portfolio {
+    constructor({ title = 'Portfolio', descr = 'Portfolio page' }) {
         this.title = title;
         this.descr = descr;
         this.print();
@@ -85,7 +99,7 @@ class Article {
 
     }
     async print() {
-        let curRoute = window.location.hash;
+        let curRoute = window.location.hash.toLowerCase();
         curRoute = curRoute.replace(hash, '');
         let dynamic = '';
         if(curRoute.search(/\/\w*$/gm)) dynamic = curRoute.replace(/\w*\//gm, '');
@@ -120,9 +134,9 @@ let pages = [
         component: Home
     },
     {
-        name: 'home',
-        url: "/home",
-        component: Home
+        name: 'portfolio',
+        url: "/portfolio",
+        component: Portfolio
     },
     {
         name: 'contacts',
@@ -146,7 +160,7 @@ let pages = [
     }
 ];
 async function mount(component = new pages[0].component({}).print(), route) {
-    let curRoute = window.location.hash;
+    let curRoute = window.location.hash.toLowerCase();
     curRoute = curRoute.replace(hash, '');
     if(curRoute.search(/\/\w*$/gm)){
         curRoute = curRoute.replace(/\/\w*$/gm, '');
